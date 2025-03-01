@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { categories } from "@/db/schema/categoriesSchema";
+import { categories } from "@/db/schema/categories.schema";
 
 const categoryNames = [
   "Fruits",

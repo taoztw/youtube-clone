@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { users } from "@/db/schema/userSchema";
+import { users } from "@/db/schema/user.schema";
 import { ratelimit } from "@/lib/ratelimit";
 import { auth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
