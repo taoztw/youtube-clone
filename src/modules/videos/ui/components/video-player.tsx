@@ -6,14 +6,14 @@ import React from "react";
 interface VideoPlayerProps {
   playbackId?: string | null | undefined;
   thumbnailUrl?: string | null | undefined;
-  authPlay?: boolean;
+  autoPlay?: boolean;
   onPlay?: () => void;
 }
 
 const VideoPlayer = ({
   playbackId,
   thumbnailUrl,
-  authPlay,
+  autoPlay,
   onPlay,
 }: VideoPlayerProps) => {
   return (
@@ -21,7 +21,7 @@ const VideoPlayer = ({
       playbackId={playbackId || ""}
       poster={thumbnailUrl || "/placeholder.svg"}
       playerInitTime={0}
-      autoPlay={authPlay}
+      autoPlay={autoPlay}
       thumbnailTime={0}
       className="w-full h-full object-contain"
       accentColor="#FF2056"
