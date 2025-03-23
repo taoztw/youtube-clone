@@ -5,6 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import VideoPlayer from "../components/video-player";
 import { cn } from "@/lib/utils";
 import VideoBanner from "../components/video-banner";
+import VideoTopRow from "../components/video-top-row";
 
 interface VideoSectionProps {
   videoId: string;
@@ -38,6 +39,7 @@ const VideoSectionSuspense = ({ videoId }: VideoSectionProps) => {
         />
       </div>
       <VideoBanner status={"ad"} />
+      <VideoTopRow video={video} />
     </>
   );
 };
