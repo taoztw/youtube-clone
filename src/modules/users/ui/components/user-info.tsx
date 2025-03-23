@@ -30,7 +30,9 @@ const UserInfo = ({ name, className, size }: UserInfoProps) => {
     <div className={cn(userInfoVariants({ size, className }))}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <p className=" hover:text-gray-800 line-clamp-1">{name}</p>
+          <p className=" hover:text-gray-800 line-clamp-1 font-semibold">
+            {name}
+          </p>
         </TooltipTrigger>
         <TooltipContent align="center" className="bg-black/70">
           <p>{name}</p>
