@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import VideoBanner from "../components/video-banner";
 import VideoTopRow from "../components/video-top-row";
 import { useAuth } from "@clerk/nextjs";
-import { create } from "domain";
 
 interface VideoSectionProps {
   videoId: string;
@@ -27,6 +26,7 @@ const VideoSectionSuspense = ({ videoId }: VideoSectionProps) => {
   const { isSignedIn } = useAuth();
   const utils = trpc.useUtils();
   const [video] = trpc.videos.getOne.useSuspenseQuery({ id: videoId });
+  // 观看次数
   const createView = trpc.videoViews.create.useMutation({
     onSuccess: () => {
       utils.videos.getOne.invalidate({ id: videoId });
