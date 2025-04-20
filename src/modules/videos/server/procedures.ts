@@ -6,10 +6,11 @@ import { mux } from "@/lib/mux";
 import { workflow } from "@/lib/workflow";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
-import { and, eq, getTableColumns, inArray } from "drizzle-orm";
+import { and, eq, getTableColumns, inArray, isNotNull } from "drizzle-orm";
 
 import { z } from "zod";
 import { videoReactions } from "@/db/schema/video.reactions.schema";
+import { subscriptions } from "@/db/schema/subscriptions.schema";
 
 export const videosRouter = createTRPCRouter({
   getOne: protectedProcedure
@@ -37,11 +38,27 @@ export const videosRouter = createTRPCRouter({
           .where(inArray(videoReactions.userId, userId ? [userId] : []))
       );
 
+      const viewerSubscriptions = db.$with("subscriptions").as(
+        db
+          .select()
+          .from(subscriptions)
+          .where(inArray(subscriptions.viewerId, userId ? [userId] : []))
+      );
+
       const [video] = await db
-        .with(viewerReactions)
+        .with(viewerReactions, viewerSubscriptions)
         .select({
           ...getTableColumns(videos),
-          user: { ...getTableColumns(users) },
+          user: {
+            ...getTableColumns(users),
+            subscriberCount: db.$count(
+              subscriptions,
+              eq(subscriptions.creatorId, users.id)
+            ),
+            viewerSubscribed: isNotNull(viewerSubscriptions.viewerId).mapWith(
+              Boolean
+            ),
+          },
           viewCount: db.$count(videoViews, eq(videoViews.videoId, videos.id)),
           likeCount: db.$count(
             videoReactions,
@@ -61,7 +78,8 @@ export const videosRouter = createTRPCRouter({
         })
         .from(videos)
         .innerJoin(users, eq(videos.userId, users.id))
-        .leftJoin(videoReactions, eq(videoReactions.videoId, videos.id))
+        .leftJoin(videoReactions, eq(viewerReactions.videoId, videos.id))
+        .leftJoin(subscriptions, eq(viewerSubscriptions.creatorId, users.id))
         .where(eq(videos.id, input.id));
       // .groupBy(videos.id, users.id, viewerReactions.type);
 
