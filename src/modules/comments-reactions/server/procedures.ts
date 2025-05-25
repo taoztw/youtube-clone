@@ -1,6 +1,5 @@
 import { db } from "@/db";
 import { commentReactions } from "@/db/schema/comments.reactions.schema";
-import { videoReactions } from "@/db/schema/video.reactions.schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
 import { and, eq } from "drizzle-orm";
